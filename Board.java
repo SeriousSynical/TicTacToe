@@ -8,7 +8,6 @@ public class Board {
     private final ArrayList<Character> row3;
     ArrayList<ArrayList<Character>> board;
 
-
     // Construct Board
     public Board() {
 
@@ -36,9 +35,100 @@ public class Board {
 
 
     // Get Values
-    public ArrayList<ArrayList<Character>> getBoard() {
+    public char getWinner() {
+
+        char winner = ' ';
+
+        // Check Columns
+        for (int i = 0; i < 3; i++) {
+
+            if (row1.get(i) == row2.get(i) && row1.get(i) == row3.get(i) && row1.get(i) != ' ') {
+
+                winner = row1.get(i);
+
+            }
+
+        }
+
+        // Check Rows
+        for (ArrayList<Character> row : board) {
+
+            if (row.get(0) == row.get(1) && row.get(0) == row.get(2) && row.get(0) != ' ') {
+
+                winner = row.get(0);
+
+            }
+
+        }
+
+        // Check Downward Diagonal
+        if (row1.get(0) == row2.get(1) && row1.get(0) == row3.get(2) && row1.get(0) != ' ') {
+
+            winner = row1.get(0);
+
+        }
+
+        // Check Upward Diagonal
+        if (row1.get(2) == row2.get(1) && row1.get(2) == row3.get(0) && row1.get(2) != ' ') {
+
+            winner = row1.get(2);
+
+        }
+
+        return winner;
+
+    }
+
+    public String getBoard() {
+
+        String board = "";
+
+        for (int i = 0 ; i < 3 ; i++) {
+
+            for (int j = 0 ; j < 3 ; j++) {
+
+               board += getRow(i).get(j);
+                if (j != 2) {
+
+                    board += " | ";
+
+                }
+
+            }
+
+            board += "\n";
+
+            if (i != 2) {
+
+                board += "--|---|--\n";
+
+            }
+
+        }
 
         return board;
+
+    }
+
+    public ArrayList<Character> getRow(int row) {
+
+        if (row == 0) {
+
+            return row1;
+
+        } else  if (row == 1) {
+
+            return row2;
+
+        } else if (row == 2) {
+
+            return row3;
+
+        } else {
+
+            return null;
+
+        }
 
     }
 
@@ -64,27 +154,55 @@ public class Board {
 
 
     // Check Board Status
+    public boolean isValid(int chosenCell) {
+
+        boolean isValid = true;
+
+        if (chosenCell >= 1 && chosenCell <= 3 && row1.get(chosenCell - 1) != ' ') {
+
+            isValid = false;
+
+        } else if (chosenCell >= 4 && chosenCell <= 6 && row2.get(chosenCell - 4) != ' ') {
+
+            isValid = false;
+
+        } else if (chosenCell >= 7 && chosenCell <= 9 && row3.get(chosenCell - 7) != ' '){
+
+            isValid = false;
+
+        }
+
+        return isValid;
+
+    }
+
     public boolean gameComplete() {
 
         boolean gameComplete = true;
 
-        for (ArrayList<Character> row : board) {
+        if (getWinner() == ' ') {
 
-            if (row.get(0) == row.get(1) && row.get(0) == row.get(2) && row.get(0) != ' ') {
+            for (ArrayList<Character> row : this.board) {
 
-                
+                for (char cell : row) {
+
+                    if (cell == ' ') {
+
+                        gameComplete = false;
+
+                    }
+
+                }
 
             }
+
+        } else {
+
+            gameComplete = true;
 
         }
 
         return gameComplete;
-
-    }
-
-    public char gameWinner() {
-
-
 
     }
 
